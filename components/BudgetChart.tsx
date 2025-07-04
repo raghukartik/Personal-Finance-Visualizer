@@ -25,16 +25,22 @@ export default function BudgetChart({
   };
   const [data, setData] = useState<BudgetDataItem[]>([]);
 
+  type BudgetItem = {
+    month: string;
+    category: string;
+    amount: number;
+  };
+
   useEffect(() => {
     const fetchChart = async () => {
       const txRes = await fetch("/api/transactions");
       const txData = (await txRes.json()).data;
       const budgetRes = await fetch("/api/budgets");
-      const budgetData = (await budgetRes.json()).data;
+      const budgetData: BudgetItem[] = (await budgetRes.json()).data;
 
       const txByCategory = new Map<string, number>();
 
-      txData.forEach((tx: any) => {
+      txData.forEach((tx: { date: string; category: string; amount: number }) => {
         if (tx.date.startsWith(month)) {
           txByCategory.set(
             tx.category,
@@ -44,8 +50,8 @@ export default function BudgetChart({
       });
 
       const chartData = budgetData
-        .filter((b: any) => b.month === month)
-        .map((b: any) => ({
+        .filter((b: BudgetItem) => b.month === month)
+        .map((b: BudgetItem) => ({
           category: b.category,
           budget: b.amount,
           actual: txByCategory.get(b.category) || 0,

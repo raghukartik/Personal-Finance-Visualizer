@@ -4,6 +4,14 @@ import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
+interface Transaction {
+  _id: string;
+  amount: number;
+  description: string;
+  date: string;
+  category?: string;
+}
+
 export default function TransactionList({
   refreshTrigger,
   onChange,
@@ -11,7 +19,7 @@ export default function TransactionList({
   refreshTrigger: number;
   onChange: () => void;
 }) {
-  const [transactions, setTransactions] = useState([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     amount: "",
@@ -35,10 +43,10 @@ export default function TransactionList({
     onChange();
   };
 
-  const startEditing = (tx: any) => {
+  const startEditing = (tx: Transaction) => {
     setEditingId(tx._id);
     setFormData({
-      amount: tx.amount,
+      amount: tx.amount.toString(),
       description: tx.description,
       date: tx.date.split("T")[0], // format for input[type="date"]
       category: tx.category || "Other",
@@ -60,14 +68,14 @@ export default function TransactionList({
     });
 
     setEditingId(null);
-    onChange(); // refresh chart + list
+    onChange();
   };
 
   return (
     <div className="mt-6">
       <h2 className="text-lg font-bold mb-2">Transactions</h2>
       <ul className="space-y-4">
-        {transactions.map((tx: any) => (
+        {transactions.map((tx: Transaction) => (
           <li key={tx._id} className="border p-3 rounded space-y-2">
             {editingId === tx._id ? (
               <form onSubmit={handleEditSubmit} className="space-y-2">

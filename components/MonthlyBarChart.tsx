@@ -6,7 +6,13 @@ import {
 } from "recharts";
 
 export default function MonthlyBarChart({ refreshTrigger }: { refreshTrigger: number }) {
-  const [chartData, setChartData] = useState([]);
+  const [chartData, setChartData] = useState<{ name: string; total: number }[]>([]);
+
+  type Transaction = {
+    date: string;
+    amount: number;
+    // add other fields if needed
+  };
 
   useEffect(() => {
     fetch("/api/transactions")
@@ -15,7 +21,7 @@ export default function MonthlyBarChart({ refreshTrigger }: { refreshTrigger: nu
         if (data.success) {
           const monthly = new Map();
 
-          data.data.forEach((tx: any) => {
+          data.data.forEach((tx: Transaction) => {
             const month = new Date(tx.date).toLocaleString("default", { month: "short", year: "numeric" });
             monthly.set(month, (monthly.get(month) || 0) + tx.amount);
           });
