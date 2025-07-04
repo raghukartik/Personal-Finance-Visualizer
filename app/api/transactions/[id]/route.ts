@@ -1,13 +1,13 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/mongodb';
 import Transaction from '@/lib/models/Transactions';
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+// ✅ Correct function signature with context
+export async function PUT(req: NextRequest, context: { params: { id: string } }) {
   await connectDB();
 
   try {
-    const { id } = params;
+    const { id } = context.params;
     const body = await req.json();
     const { amount, description, date, category } = body;
 
@@ -22,16 +22,16 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     }
 
     return NextResponse.json({ success: true, data: updated });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ success: false, error: 'Failed to update transaction' }, { status: 500 });
   }
 }
 
-export async function DELETE(_: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, context: { params: { id: string } }) {
   await connectDB();
 
   try {
-    const { id } = params;
+    const { id } = context.params;
 
     const deleted = await Transaction.findByIdAndDelete(id);
 
@@ -40,7 +40,7 @@ export async function DELETE(_: NextRequest, { params }: { params: { id: string 
     }
 
     return NextResponse.json({ success: true, message: 'Transaction deleted' });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ success: false, error: 'Failed to delete transaction' }, { status: 500 });
   }
 }
