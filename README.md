@@ -49,6 +49,10 @@ A simple full-stack web app to track your personal finances, visualize spending,
 
 **🔗 Live Demo:** [https://personal-finance-visualizer-jet.vercel.app](https://personal-finance-visualizer-jet.vercel.app)
 
+> 📝 Note: The app connects to a live MongoDB database. The data you see is real — not hardcoded.  
+> You can freely add, edit, or delete transactions.  
+> There is no login/signup yet, so data is shared and accessible to all visitors.
+
 
 
 ---
