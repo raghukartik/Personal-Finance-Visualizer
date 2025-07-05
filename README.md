@@ -47,7 +47,8 @@ A simple full-stack web app to track your personal finances, visualize spending,
 
 ## 🌐 Deployment
 
-**🔗 Live Demo:** [https://personal-finance-visualizer-jet.vercel.app/]((https://personal-finance-visualizer-jet.vercel.app/))
+**🔗 Live Demo:** [https://personal-finance-visualizer-jet.vercel.app](https://personal-finance-visualizer-jet.vercel.app)
+
 
 
 ---
