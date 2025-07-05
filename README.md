@@ -47,9 +47,8 @@ A simple full-stack web app to track your personal finances, visualize spending,
 
 ## 🌐 Deployment
 
-**🔗 Live Demo:** [https://your-deployment-url.vercel.app](https://your-deployment-url.vercel.app)
+**🔗 Live Demo:** [https://personal-finance-visualizer-jet.vercel.app/]((https://personal-finance-visualizer-jet.vercel.app/))
 
-> 💡 Replace the link with your deployed app on Vercel or any other hosting.
 
 ---
 
