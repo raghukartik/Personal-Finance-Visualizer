@@ -2,12 +2,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/mongodb';
 import Transaction from '@/lib/models/Transactions';
 
-// ✅ Correct function signature with context
-export async function PUT(req: NextRequest, context: { params: { id: string } }) {
-  await connectDB();
+export async function PUT(req: NextRequest, ctx: unknown) {
+  const context = ctx as { params: { id: string } }; 
 
   try {
-    const { id } = context.params;
+    await connectDB();
+
+    const id = context.params.id;
     const body = await req.json();
     const { amount, description, date, category } = body;
 
@@ -18,21 +19,29 @@ export async function PUT(req: NextRequest, context: { params: { id: string } })
     );
 
     if (!updated) {
-      return NextResponse.json({ success: false, error: 'Transaction not found' }, { status: 404 });
+      return NextResponse.json(
+        { success: false, error: 'Transaction not found' },
+        { status: 404 }
+      );
     }
 
     return NextResponse.json({ success: true, data: updated });
-  } catch {
-    return NextResponse.json({ success: false, error: 'Failed to update transaction' }, { status: 500 });
+  } catch (error) {
+    console.error('[PUT /api/transactions/[id]]:', error);
+    return NextResponse.json(
+      { success: false, error: 'Failed to update transaction' },
+      { status: 500 }
+    );
   }
 }
 
-export async function DELETE(req: NextRequest, context: { params: { id: string } }) {
-  await connectDB();
+export async function DELETE(req: NextRequest, ctx: unknown) {
+  const context = ctx as { params: { id: string } };
 
   try {
-    const { id } = context.params;
+    await connectDB();
 
+    const { id } = context.params;
     const deleted = await Transaction.findByIdAndDelete(id);
 
     if (!deleted) {
@@ -40,7 +49,8 @@ export async function DELETE(req: NextRequest, context: { params: { id: string }
     }
 
     return NextResponse.json({ success: true, message: 'Transaction deleted' });
-  } catch {
+  } catch (error) {
+    console.error('[DELETE /api/transactions/[id]]:', error);
     return NextResponse.json({ success: false, error: 'Failed to delete transaction' }, { status: 500 });
   }
 }
